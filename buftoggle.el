@@ -3,7 +3,7 @@
 ;; Copyright (C) 2012  Michael Weber
 
 ;; Author: Michael Weber <michaelw@foldr.org>
-;; Keywords: c, languages
+;; Keywords: files, extensions, convenience, c
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
