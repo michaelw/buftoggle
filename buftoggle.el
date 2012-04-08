@@ -58,17 +58,18 @@ and `buftoggle-search-path-alist' for paths where related files are searched."
          (dirname (file-name-directory (buffer-file-name)))
          (basename (file-name-nondirectory
                     (file-name-sans-extension (buffer-file-name))))
-         (count-ext (cdr (find-if (lambda (i) (string= (car i) ext)) buftoggle-pairs-alist))))
-    (cond (count-ext
+         (pair-exts (assoc-default ext buftoggle-pairs-alist 'string=)))
+    (cond (pair-exts
            (or
-            (loop for b in (mapcar (lambda (i) (concat buffer-name "." i)) count-ext)
-                  when (bufferp (get-buffer b)) return (switch-to-buffer b))
+            (loop for ext in pair-exts
+                  for match = (concat buffer-name "." ext)
+                  when (bufferp (get-buffer match)) return (switch-to-buffer match))
 
-            (let ((match (buftoggle-find-pair basename count-ext)))
+            (let ((match (buftoggle-find-pair basename pair-exts)))
               (when match (find-file match)))
                 
             (loop for path in (buftoggle-search-path dirname)
-                  for match = (buftoggle-recursive-find-path path basename count-ext)
+                  for match = (buftoggle-recursive-find-path path basename pair-exts)
                   when match return (find-file match))
              
             (message "There is no corresponding buftoggle file")
@@ -89,8 +90,8 @@ and `buftoggle-search-path-alist' for paths where related files are searched."
                   paths)))))))
 
 (defun buftoggle-find-pair (base-path exts)
-  (loop for c in exts
-        for match = (concat base-path "." c)
+  (loop for ext in exts
+        for match = (concat base-path "." ext)
         when (file-exists-p match) return match))
 
 (defun buftoggle-recursive-find-path (path basename exts)
