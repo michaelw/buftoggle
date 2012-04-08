@@ -29,7 +29,7 @@
 ;;; Code:
 (eval-and-compile (require 'cl))
 
-(defvar buftoggle-pairs
+(defvar buftoggle-pairs-alist
   '(("h" "cpp" "cc" "c")
     ("H" "C" "CPP" "CC")
     ("hpp" "cpp" "cc")
@@ -58,7 +58,7 @@ and `buftoggle-search-path-alist' for paths where related files are searched."
          (dirname (file-name-directory (buffer-file-name)))
          (basename (file-name-nondirectory
                     (file-name-sans-extension (buffer-file-name))))
-         (count-ext (cdr (find-if (lambda (i) (string= (car i) ext)) buftoggle-pairs))))
+         (count-ext (cdr (find-if (lambda (i) (string= (car i) ext)) buftoggle-pairs-alist))))
     (cond (count-ext
            (or
             (loop for b in (mapcar (lambda (i) (concat buffer-name "." i)) count-ext)
