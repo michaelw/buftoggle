@@ -63,7 +63,8 @@ and `buftoggle-search-path-alist' for paths where related files are searched."
            (or
             (loop for ext in pair-exts
                   for match = (concat buffer-name "." ext)
-                  when (bufferp (get-buffer match)) return (switch-to-buffer match))
+                  when (bufferp (get-buffer match))
+                  return (pop-to-buffer match))
 
             (let ((match (buftoggle-find-pair basename pair-exts)))
               (when match (find-file match)))
